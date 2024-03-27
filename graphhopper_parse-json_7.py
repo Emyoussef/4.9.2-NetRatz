@@ -16,7 +16,7 @@ def geocoding(location, key):
         lat = json_data["hits"][0]["point"]["lat"]
         lng = json_data["hits"][0]["point"]["lng"]
         name = json_data["hits"][0]["name"]
-        value = json_data["hits"][0]["osm_value"]
+        value = json_data["hits"][0]["osm_value"] 0000
 
         if "country" in json_data["hits"][0]:
             country = json_data["hits"][0]["country"]
