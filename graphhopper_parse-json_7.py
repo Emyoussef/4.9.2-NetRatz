@@ -95,7 +95,7 @@ while True:
             print("Trip Duration: {0:02d}:{1:02d}:{2:02d}".format(hr, min, sec))
             print("=================================================")
             for each in range(len(paths_data["paths"][0]["instructions"])):
-               path = paths_data["paths"][0]["instructions"][each]["text"]
+                path = paths_data["paths"][0]["instructions"][each]["text"]
                 distance = paths_data["paths"][0]["instructions"][each]["distance"]
                 if distance_choice == "miles":
                     distance_display = distance / 1000 / 1.61
