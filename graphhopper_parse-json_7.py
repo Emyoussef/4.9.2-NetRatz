@@ -89,6 +89,7 @@ while True:
             print("Distance Traveled: {0:.1f} miles / {1:.1f} km".format(miles, km))
             print("Trip Duration: {0:02d}:{1:02d}:{2:02d}".format(hr, min, sec))
             print("=================================================")
+            print("Round Trip Duration: {0:02d}:{1:02d}:{2:02d}".format(hr * 2, mins * 2, sec * 2))
             for each in range(len(paths_data["paths"][0]["instructions"])):
                 path = paths_data["paths"][0]["instructions"][each]["text"]
                 distance = paths_data["paths"][0]["instructions"][each]["distance"]
