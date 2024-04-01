@@ -81,19 +81,36 @@ while True:
         print("Directions from " + orig[3] + " to " + dest[3] + " by " + vehicle)
         print("=================================================")
         if paths_status == 200:
-            miles = (paths_data["paths"][0]["distance"])/1000/1.61
-            km = (paths_data["paths"][0]["distance"])/1000
-            sec = int(paths_data["paths"][0]["time"]/1000%60)
-            min = int(paths_data["paths"][0]["time"]/1000/60%60)
-            hr = int(paths_data["paths"][0]["time"]/1000/60/60)
-            print("Distance Traveled: {0:.1f} miles / {1:.1f} km".format(miles, km))
+            miles = (paths_data["paths"][0]["distance"]) / 1000 / 1.61
+            km = (paths_data["paths"][0]["distance"]) / 1000
+            distance_choice = input("Display distance in miles or kilometers? (miles/kilometers): ").lower()
+            if distance_choice == "miles":
+                print("Distance Traveled: {0:.1f} miles".format(miles))
+                print("Round Trip Distance: {0:.1f} miles".format(miles * 2))
+            else:
+                print("Distance Traveled: {0:.1f} kilometers".format(km))
+                print("Round Trip Distance: {0:.1f} kilometers".format(km * 2))
+
+
+            sec = int(paths_data["paths"][0]["time"] / 1000 % 60)
+            min = int(paths_data["paths"][0]["time"] / 1000 / 60 % 60)
+            hr = int(paths_data["paths"][0]["time"] / 1000 / 60 / 60)
             print("Trip Duration: {0:02d}:{1:02d}:{2:02d}".format(hr, min, sec))
+            sec = int(paths_data["paths"][0]["time"] / 500 % 60)
+            min = int(paths_data["paths"][0]["time"] / 500 / 60 % 60)
+            hr = int(paths_data["paths"][0]["time"] / 500 / 60 / 60)
+            print("Round Trip Duration: {0:02d}:{1:02d}:{2:02d}".format(hr, min, sec))
             print("=================================================")
-            print("Round Trip Duration: {0:02d}:{1:02d}:{2:02d}".format(hr * 2, mins * 2, sec * 2))
             for each in range(len(paths_data["paths"][0]["instructions"])):
                 path = paths_data["paths"][0]["instructions"][each]["text"]
                 distance = paths_data["paths"][0]["instructions"][each]["distance"]
-                print("{0} ( {1:.1f} km / {2:.1f} miles )".format(path, distance/1000,distance/1000/1.61))
+                if distance_choice == "miles":
+                    distance_display = distance / 1000 / 1.61
+                    distance_unit = "miles"
+                else:
+                    distance_display = distance / 1000
+                    distance_unit = "kilometers"
+                print("{0} ( {1:.1f} {2} )".format(path, distance_display, distance_unit))
             print("=============================================")
         else:
             print("Error message: " + paths_data["message"])
