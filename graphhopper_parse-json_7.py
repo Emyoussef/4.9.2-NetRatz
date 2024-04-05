@@ -1,9 +1,29 @@
+#!/usr/bin/python3
+
+'''
+Spring 2024 CTS-233-400 Social Coding Project
+ _______          __ __________        __          
+ \      \   _____/  |\______   _____ _/  |_________
+ /   |   \_/ __ \   __|       _\__  \\   __\___   /
+/    |    \  ___/|  | |    |   \/ __ \|  |  /    / 
+\____|__  /\___  |__| |____|_  (____  |__| /_____ \
+        \/     \/            \/     \/           \/
+Josh B., Josh K., Clover l, Drew P, Evan y
+Enhancement of graphhopper lab 4.9.2
+
+To dos (02 Apr 2024):
+    line 100 - included choice between miles/kilometers
+    line 108 - included round trip time/distance
+'''
+
 import requests
 import urllib.parse
 
+# Global constants
 route_url = "https://graphhopper.com/api/1/route?"
 key = "7d0c4840-367b-47d5-bf27-748914da9f7d"  # Replace with your Graphhopper API key
 
+# Geocoding API function
 def geocoding(location, key):
     while location =="":
         location = input("Enter location again: ")
@@ -41,6 +61,7 @@ def geocoding(location, key):
             print("Geocode API status: " + str(json_status) + "\nError message: " + json_data["message"])
     return json_status,lat,lng,new_loc
 
+# Script Start
 while True:
     print("+++++++++++++++++++++++++++++++++++++++++++++")
     print("Vehicle profiles available on Graphhopper:")
