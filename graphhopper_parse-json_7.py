@@ -8,12 +8,17 @@ Spring 2024 CTS-233-400 Social Coding Project
 /    |    \  ___/|  | |    |   \/ __ \|  |  /    / 
 \____|__  /\___  |__| |____|_  (____  |__| /_____ \
         \/     \/            \/     \/           \/
-Josh B., Josh K., Clover l, Drew P, Evan y
+Josh B., Josh K., Clover L., Drew P., & Evan Y.
 Enhancement of graphhopper lab 4.9.2
 
-To dos (02 Apr 2024):
-    line 100 - included choice between miles/kilometers
-    line 108 - included round trip time/distance
+Change log:
+02 Apr 2024:
+    included choice between miles/kilometers
+    included round trip time/distance
+04 Apr 2024
+    changed input confirmation to only match first character
+    added exit (quit) options to location and distance unit selections
+    commented out some of the diagnostic api data
 '''
 
 import requests
@@ -52,7 +57,8 @@ def geocoding(location, key):
             new_loc = name + ", " + country
         else:
             new_loc = name
-        print("Geocoding API URL for " + new_loc + " (Location Type: " + value + ")\n" + url)
+        # uncomment for api debugging
+        # print("Geocoding API URL for " + new_loc + " (Location Type: " + value + ")\n" + url)
     else:
         lat="null"
         lng="null"
@@ -66,27 +72,33 @@ while True:
     print("+++++++++++++++++++++++++++++++++++++++++++++")
     print("Vehicle profiles available on Graphhopper:")
     print("+++++++++++++++++++++++++++++++++++++++++++++")
-    print("car, bike, foot")
+    print("car, bike, foot or quit")
     print("+++++++++++++++++++++++++++++++++++++++++++++")
-    profile =["car", "bike", "foot"]
     vehicle = input("Enter a vehicle profile from the list above: ")
-    if vehicle == "quit" or vehicle == "q":
+    if vehicle.lower()[0] == "q":
+        print("Quitting... ")
         break
-    elif vehicle in profile:
-        vehicle = vehicle
+    elif vehicle.lower()[0] == "c":
+        vehicle = "car"
+    elif vehicle.lower()[0] == "b":
+        vehicle = "bike"
+    elif vehicle.lower()[0] == "f":
+        vehicle = "foot"
     else:
         vehicle = "car"
         print("No valid vehicle profile was entered. Using the car profile.")
     
     loc1 = input("Starting Location: ")
-    if loc1 == "quit" or loc1 == "q":
-        break
+    if loc1.lower == "quit" or loc1.lower == "q":
+        print("Quitting... ")
+        exit
     
     orig = geocoding(loc1, key)
     loc2 = input("Destination: ")
     
-    if loc2 == "quit" or loc2 =="q":
-        break
+    if loc2.lower == "quit" or loc2.lower =="q":
+        print("Quitting... ")
+        exit
     
     dest = geocoding(loc2, key)
     print("=================================================")
@@ -97,30 +109,38 @@ while True:
         paths_url = route_url + urllib.parse.urlencode({"key":key, "vehicle":vehicle}) + op + dp
         paths_status = requests.get(paths_url).status_code
         paths_data = requests.get(paths_url).json()
-        print("Routing API Status: " + str(paths_status) + "\nRouting API URL:\n" + paths_url)
+        # uncomment for API debugging
+        #print("Routing API Status: " + str(paths_status) + "\nRouting API URL:\n" + paths_url)
         print("=================================================")
         print("Directions from " + orig[3] + " to " + dest[3] + " by " + vehicle)
         print("=================================================")
         if paths_status == 200:
             miles = (paths_data["paths"][0]["distance"]) / 1000 / 1.61
             km = (paths_data["paths"][0]["distance"]) / 1000
-            distance_choice = input("Display distance in miles or kilometers? (miles/kilometers): ").lower()
-            if distance_choice == "miles":
+            # ask user for distance unit
+            distance_choice = input("Display distance in miles or kilometers? (miles/kilometers): ")
+            # compare lowercase first letter
+            if distance_choice.lower()[0] == "m":
+                distance_choice == "miles"
                 print("Distance Traveled: {0:.1f} miles".format(miles))
                 print("Round Trip Distance: {0:.1f} miles".format(miles * 2))
+            elif distance_choice.lower()[0] == "q":
+                print("Quitting... ")
+                break
             else:
                 print("Distance Traveled: {0:.1f} kilometers".format(km))
                 print("Round Trip Distance: {0:.1f} kilometers".format(km * 2))
 
-
+            # Calculate Trip Duration
             sec = int(paths_data["paths"][0]["time"] / 1000 % 60)
             min = int(paths_data["paths"][0]["time"] / 1000 / 60 % 60)
             hr = int(paths_data["paths"][0]["time"] / 1000 / 60 / 60)
             print("Trip Duration: {0:02d}:{1:02d}:{2:02d}".format(hr, min, sec))
-            sec = int(paths_data["paths"][0]["time"] / 500 % 60)
-            min = int(paths_data["paths"][0]["time"] / 500 / 60 % 60)
-            hr = int(paths_data["paths"][0]["time"] / 500 / 60 / 60)
-            print("Round Trip Duration: {0:02d}:{1:02d}:{2:02d}".format(hr, min, sec))
+            # Calculate Round Trip Duration (duration x 2)
+            r_sec = int(paths_data["paths"][0]["time"] / 500 % 60)
+            r_min = int(paths_data["paths"][0]["time"] / 500 / 60 % 60)
+            r_hr = int(paths_data["paths"][0]["time"] / 500 / 60 / 60)
+            print("Round Trip Duration: {0:02d}:{1:02d}:{2:02d}".format(r_hr, r_min, r_sec))
             print("=================================================")
             for each in range(len(paths_data["paths"][0]["instructions"])):
                 path = paths_data["paths"][0]["instructions"][each]["text"]
@@ -136,7 +156,4 @@ while True:
         else:
             print("Error message: " + paths_data["message"])
             print("*************************************************")
-
-
-       
-    
+         
