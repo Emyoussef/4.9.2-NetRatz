@@ -19,6 +19,8 @@ Change log:
     changed input confirmation to only match first character
     added exit (quit) options to location and distance unit selections
     commented out some of the diagnostic api data
+08 Apr 2024
+    added message indicating that miles will be the default choice when no proper input is given to miles/kilometers selection
 '''
 
 import requests
