@@ -1,19 +1,15 @@
 #!/bin/bash
 
-run_tests() {
-    echo "Running tests..."
-    python3 -m pytest
-}
+# Remove existing Output.txt if it exists
+rm Output.txt
 
-echo "Checking out code..."
-python3 Graphhopper_App.py
+# Provide input to the Python script and capture the output
+echo "Running Python script with input..."
+python3 test_Graphhopper.py << testFile > Output.txt
+car  # Input
+washinton,DC #Input
+Baltimore,MD #Input
+miles #input
+q #input
+testFile
 
-run_tests
-
-if [ $? -eq 0 ]; then
-    echo "All tests passed!"
-
-else
-    echo "Tests failed!"
-    exit 1
-fi
